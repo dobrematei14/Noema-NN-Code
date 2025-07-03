@@ -2,11 +2,6 @@
 
 Building neural networks from the ground up in Python to understand how they actually work.
 
-## Requirements
-
-- Python 3.7+
-- Basic programming knowledge
-- No external libraries (pure Python only)
 
 ## Chapter 1: Neurons
 
