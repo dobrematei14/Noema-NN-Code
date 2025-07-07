@@ -70,3 +70,41 @@ batch_outputs = dense_layer.forward(batch_inputs)
 - **Scalability**: Handles large datasets
 - **Batch Processing**: Multiple samples simultaneously
 - **GPU Compatible**: NumPy operations
+
+## Chapter 4: Activation Functions
+
+### Overview
+Activation functions add non-linearity to neural networks, enabling them to learn complex patterns.
+
+### ReLU (Rectified Linear Unit)
+```
+ReLU(x) = max(0, x)
+```
+Outputs the input if positive, zero otherwise. Most popular activation for hidden layers.
+
+### Softmax
+```
+Softmax(xᵢ) = e^xᵢ / Σⱼ e^xⱼ
+```
+Converts outputs to probabilities (sum to 1). Used in final layer for classification.
+
+### Implementation
+```python
+from Activation_Functions.act_func import ActivationReLU, ActivationSoftmax
+from Layer.layer_dense import Layer_Dense
+
+# Create layers and activations
+dense1 = Layer_Dense(4, 5)
+relu = ActivationReLU()
+dense2 = Layer_Dense(5, 3)
+softmax = ActivationSoftmax()
+
+# Forward pass
+inputs = [[1.0, 2.0, 3.0, 2.5]]
+dense1.forward(inputs)
+relu.forward(dense1.output)
+dense2.forward(relu.output)
+softmax.forward(dense2.output)
+
+print("Probabilities:", softmax.output)
+```
