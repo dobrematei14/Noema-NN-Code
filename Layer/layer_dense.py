@@ -1,6 +1,6 @@
 import numpy as np
 
-class Layer_Dense:
+class LayerDense:
     """
     Layer implementation using random initialization - compatible with batch processing
     as well as single sample processing.

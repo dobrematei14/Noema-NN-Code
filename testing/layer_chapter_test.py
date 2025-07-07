@@ -2,14 +2,14 @@ import numpy as np
 import nnfs
 from nnfs.datasets import spiral_data
 
-from Layer.layer_dense import Layer_Dense
+from Layer.layer_dense import LayerDense
 
 nnfs.init()
 
 def test_layer_dense_spiral_data():
     X, y = spiral_data(100, 3)
     
-    dense = Layer_Dense(2, 3)
+    dense = LayerDense(2, 3)
     dense.forward(X)
     
     # Expected first 5 outputs (updated to match current implementation)

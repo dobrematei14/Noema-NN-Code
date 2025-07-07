@@ -9,7 +9,7 @@ def test_neuron_forward():
     expected_output = 35.7
     actual_output = neuron.forward(inputs)
     
-    assert actual_output == expected_output
+    assert abs(actual_output - expected_output) < 0.001
 
 def test_neuron_str():
     weights = [3.1, 2.1, 8.7]
