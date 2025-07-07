@@ -83,3 +83,5 @@ if __name__ == "__main__":
 
 
 # $env:PYTHONPATH="." ; python.exe .\testing\act_func_chapter_test.py
+
+# PYTHONPATH=. python testing/act_func_chapter_test.py
