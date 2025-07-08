@@ -108,3 +108,42 @@ softmax.forward(dense2.output)
 
 print("Probabilities:", softmax.output)
 ```
+
+## Chapter 5: Loss Functions
+
+### Overview
+Loss functions measure how far predictions are from actual values. Networks minimize this value during training.
+
+### Categorical Cross Entropy
+```
+Loss = -log(predicted_probability_of_correct_class)
+```
+Used for multi-class classification with softmax outputs.
+
+### Mathematical Function
+
+Single sample:
+$$L = -\log(p_i)$$
+
+Batch of samples:
+$$L = -\frac{1}{N} \sum_{i=1}^{N} \log(p_i)$$
+
+General form:
+$$L = -\frac{1}{N} \sum_{i=1}^{N} \sum_{j=1}^{C} y_{ij} \log(p_{ij})$$
+
+### Component Breakdown
+- **$N$**: Number of samples in batch
+- **$C$**: Number of classes
+- **$p_i$**: Predicted probability for correct class of sample $i$
+- **$p_{ij}$**: Predicted probability that sample $i$ belongs to class $j$
+- **$y_{ij}$**: 1 if sample $i$ belongs to class $j$, 0 otherwise
+- **$\log$**: Natural logarithm (base e)
+- **Negative sign**: Makes loss positive (since log of probabilities is negative)
+
+### Usage
+```python
+from Losses.loss import Loss_CategoricalCrossentropy
+
+loss_function = Loss_CategoricalCrossentropy()
+loss = loss_function.calculate(predictions, true_labels)
+```
