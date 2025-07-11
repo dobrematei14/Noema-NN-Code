@@ -23,14 +23,11 @@ class Loss_CategoricalCrossentropy(Loss):
 
 class Loss_BinaryCrossentropy(Loss):
     def forward(self, y_pred, y_true):
-        # Clip predictions to avoid log(0)
         y_pred_clipped = np.clip(y_pred, 1e-7, 1-1e-7)
         
-        # If y_pred is 2D (samples, 1), flatten it to 1D
         if len(y_pred_clipped.shape) == 2:
             y_pred_clipped = y_pred_clipped.flatten()
         
-        # Calculate binary crossentropy loss
         sample_losses = -(y_true * np.log(y_pred_clipped) + (1 - y_true) * np.log(1 - y_pred_clipped))
         
         return sample_losses
