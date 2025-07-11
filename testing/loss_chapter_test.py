@@ -8,10 +8,11 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from Layer.layer_dense import LayerDense
-from Activation_Functions.act_func import ActivationReLU, ActivationSoftmax
-from Losses.loss import Loss_CategoricalCrossentropy
+from Activation_Functions.act_func import ActivationReLU, ActivationSoftmax, ActivationSigmoid
+from Losses.loss import Loss_CategoricalCrossentropy, Loss_BinaryCrossentropy
 
 from datasets.iris import load_iris
+from datasets.diabetes import load_pima_diabetes
 
 
 
@@ -53,12 +54,12 @@ def test_iris_classification():
     print("\nTesting iris classification...")
     X, y = load_iris()
     
-    dense1 = LayerDense(4, 8) # first hidden layer
+    dense1 = LayerDense(4, 8)
     activation1 = ActivationReLU()
     
-    dense2 = LayerDense(8, 3) # second hidden layer
-    activation2 = ActivationSoftmax() # output layer
-    loss_function = Loss_CategoricalCrossentropy() # loss function
+    dense2 = LayerDense(8, 3)
+    activation2 = ActivationSoftmax() 
+    loss_function = Loss_CategoricalCrossentropy()
     
     dense1.forward(X)
     activation1.forward(dense1.output)
@@ -72,9 +73,33 @@ def test_iris_classification():
     
 
 
+def test_diabetes_classification():
+    print("\nTesting diabetes classification...")
+    X, y = load_pima_diabetes()
+    
+    dense1 = LayerDense(8, 16)
+    activation1 = ActivationReLU()
+    
+    dense2 = LayerDense(16, 1)
+    activation2 = ActivationSigmoid()
+    loss_function = Loss_BinaryCrossentropy()  # Use binary crossentropy for binary classification
+    
+    dense1.forward(X)
+    activation1.forward(dense1.output)
+    dense2.forward(activation1.output)
+    activation2.forward(dense2.output)
+    
+    loss = loss_function.calculate(activation2.output, y)
+    
+    
+    print(f"\nDiabetes classification loss: {loss}")
+    
+
+
 if __name__ == "__main__":
     test_categorical_crossentropy_loss()
     test_iris_classification()
+    test_diabetes_classification()
 
 
 # PYTHONPATH=. python testing/loss_chapter_test.py

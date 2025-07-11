@@ -3,7 +3,7 @@ import numpy as np
 import os
 import kagglehub
 import matplotlib.pyplot as plt
-from sklearn.decomposition import PCA
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.preprocessing import StandardScaler
 
 def load_iris():
@@ -27,15 +27,15 @@ def load_iris():
     
     return X, y
 
-def visualize_iris_pca():
-    """Create PCA visualization showing species overlap in 2D."""
+def visualize_iris_lda():
+    """Create LDA visualization showing species separation in 2D."""
     X, y = load_iris()
     
-    # Standardize and apply PCA
+    # Standardize and apply LDA
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
-    pca = PCA(n_components=2)
-    X_pca = pca.fit_transform(X_scaled)
+    lda = LinearDiscriminantAnalysis(n_components=2)
+    X_lda = lda.fit_transform(X_scaled, y)
     
     # Plot
     species_names = ['Setosa', 'Versicolor', 'Virginica']
@@ -45,19 +45,18 @@ def visualize_iris_pca():
     
     for species_idx, (species, color) in enumerate(zip(species_names, colors)):
         species_mask = y == species_idx
-        plt.scatter(X_pca[species_mask, 0], X_pca[species_mask, 1], 
+        plt.scatter(X_lda[species_mask, 0], X_lda[species_mask, 1], 
                    alpha=0.7, label=species, color=color, s=60)
     
-    plt.xlabel('First Principal Component')
-    plt.ylabel('Second Principal Component')
-    plt.title('Iris Dataset: PCA Visualization')
+    plt.xlabel('First Linear Discriminant')
+    plt.ylabel('Second Linear Discriminant')
+    plt.title('Iris Dataset: LDA Visualization')
     plt.legend()
     plt.grid(True, alpha=0.3)
     plt.show()
 
 if __name__ == "__main__":
-    visualize_iris_pca()
-    
+    visualize_iris_lda()
     
 
 # Windows:$env:PYTHONPATH="." ; python.exe .\datasets\iris.py
