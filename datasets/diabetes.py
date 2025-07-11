@@ -58,3 +58,4 @@ if __name__ == "__main__":
     
     
 # Windows: $env:PYTHONPATH="." ; python.exe .\datasets\diabetes.py
+# Mac/Linux: PYTHONPATH=. python datasets/diabetes.py

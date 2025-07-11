@@ -60,3 +60,4 @@ if __name__ == "__main__":
     
 
 # Windows:$env:PYTHONPATH="." ; python.exe .\datasets\iris.py
+# Mac/Linux: PYTHONPATH=. python datasets/iris.py

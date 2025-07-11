@@ -104,5 +104,6 @@ if __name__ == "__main__":
 
 # PYTHONPATH=. python testing/loss_chapter_test.py
 # Windows: $env:PYTHONPATH="." ; python.exe .\testing\loss_chapter_test.py
+# Mac/Linux: PYTHONPATH=. python testing/loss_chapter_test.py
 
 
