@@ -10,6 +10,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from Layer.layer_dense import LayerDense
 from Activation_Functions.act_func import ActivationReLU, ActivationSoftmax, ActivationSigmoid
 from Losses.loss import Loss_CategoricalCrossentropy, Loss_BinaryCrossentropy
+from Metrics.accuracy import AccuracyCategorical
 
 from datasets.iris import load_iris
 from datasets.diabetes import load_pima_diabetes
@@ -90,9 +91,11 @@ def test_diabetes_classification():
     activation2.forward(dense2.output)
     
     loss = loss_function.calculate(activation2.output, y)
+    accuracy = AccuracyCategorical()
+    acc = accuracy.calculate(activation2.output, y)
     
     
-    print(f"\nDiabetes classification loss: {loss}")
+    print(f"\nDiabetes classification loss: {loss}, accuracy: {acc}")
     
 
 
