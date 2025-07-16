@@ -38,10 +38,8 @@ class ActivationSoftmax: # sum to 1 probability distribution activation
         return self.output
     
     def backward(self, dvalues): # output change based on input change
-        # Create uninitialized array
         self.dinputs = np.empty_like(dvalues)
         
-        # Enumerate outputs and gradients
         for index, (single_output, single_dvalues) in enumerate(zip(self.output, dvalues)):
             # Flatten output array
             single_output = single_output.reshape(-1, 1)
