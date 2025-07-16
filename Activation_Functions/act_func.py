@@ -23,7 +23,8 @@ class ActivationReLU: # 0 negative, linear positive activation
         self.output = np.maximum(0, inputs)
         return self.output
     
-    def backward(self, dvalues):
+    def backward(self, dvalues): # derivative 1 if positive, 0 if negative, block gradient if negative
+        # logic is if it didnt contribute to the loss, then dont backpropagate
         self.dinputs = dvalues.copy()
         self.dinputs[self.inputs <= 0] = 0
         return self.dinputs
@@ -36,7 +37,7 @@ class ActivationSoftmax: # sum to 1 probability distribution activation
         self.output = probabilities
         return self.output
     
-    def backward(self, dvalues):
+    def backward(self, dvalues): # output change based on input change
         # Create uninitialized array
         self.dinputs = np.empty_like(dvalues)
         
@@ -52,7 +53,7 @@ class ActivationSoftmax: # sum to 1 probability distribution activation
         return self.dinputs
 
 
-class Activation_Softmax_Loss_CategoricalCrossentropy:
+class Activation_Softmax_Loss_CategoricalCrossentropy: # computational efficient way to do softmax and cross entropy loss
     """
     Combined Softmax activation and Categorical Cross-Entropy loss
     for faster backward step
@@ -70,7 +71,7 @@ class Activation_Softmax_Loss_CategoricalCrossentropy:
         # Calculate and return loss value
         return self.loss.calculate(self.output, y_true)
     
-    def backward(self, dvalues, y_true):
+    def backward(self, dvalues, y_true): # take gradient and subtract one hot encoded from it. negative ones shoudl increase, positive ones should decrease
         # Number of samples
         samples = len(dvalues)
         
@@ -78,7 +79,6 @@ class Activation_Softmax_Loss_CategoricalCrossentropy:
         if len(y_true.shape) == 2:
             y_true = np.argmax(y_true, axis=1)
         
-        # Copy so we can safely modify
         self.dinputs = dvalues.copy()
         
         # Calculate gradient

@@ -55,4 +55,4 @@ if __name__ == "__main__":
     test_layer_backpropagation()
 
 
-# python -m testing.test_backpropagation_chapter9
+# python -m testing.backprop_chapter_test

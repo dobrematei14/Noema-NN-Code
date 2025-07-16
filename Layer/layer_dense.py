@@ -37,10 +37,10 @@ class LayerDense:
         Returns:
             list: Gradient of the loss with respect to the input of this layer
         """
-        self.dinputs = np.dot(dvalues, self.weights.T)
+        self.dinputs = np.dot(dvalues, self.weights.T) # gradient of the loss with respect to the inputs of this layer
         
-        # Gradient with respect to weights and biases
-        self.dweights = np.dot(self.inputs.T, dvalues)
-        self.dbiases = np.sum(dvalues, axis=0, keepdims=True)
+       
+        self.dweights = np.dot(self.inputs.T, dvalues) # gradient of the loss with respect to the weights of this layer
+        self.dbiases = np.sum(dvalues, axis=0, keepdims=True) # gradient of the loss with respect to the biases of this layer
         
         return self.dinputs
