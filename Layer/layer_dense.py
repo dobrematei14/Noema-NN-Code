@@ -24,6 +24,23 @@ class LayerDense:
         Returns:
             list: The outputs from all neurons in the layer
         """
+        self.inputs = inputs
         self.output = np.dot(inputs, self.weights) + self.biases
         return self.output
- 
+    
+    def backward(self, dvalues):
+
+        """
+        Args:
+            dvalues (list): Gradient of the loss with respect to the output of this layer
+            
+        Returns:
+            list: Gradient of the loss with respect to the input of this layer
+        """
+        self.dinputs = np.dot(dvalues, self.weights.T)
+        
+        # Gradient with respect to weights and biases
+        self.dweights = np.dot(self.inputs.T, dvalues)
+        self.dbiases = np.sum(dvalues, axis=0, keepdims=True)
+        
+        return self.dinputs
