@@ -148,7 +148,128 @@ loss_function = Loss_CategoricalCrossentropy()
 loss = loss_function.calculate(predictions, true_labels)
 ```
 
-## Chapter 6: Optimizers
+## Chapter 6: Backpropagation
+
+### Overview
+Backpropagation is the algorithm that trains neural networks by computing gradients of the loss function with respect to all parameters (weights and biases). It uses the chain rule of calculus to efficiently calculate how each parameter should be adjusted to minimize the loss.
+
+### Mathematical Foundation
+
+**Chain Rule:**
+```
+∂L/∂w = ∂L/∂y × ∂y/∂w
+```
+Where:
+- L = Loss function
+- y = Output of a layer
+- w = Weight parameter
+
+**For a multi-layer network:**
+```
+∂L/∂w₁ = ∂L/∂y₃ × ∂y₃/∂y₂ × ∂y₂/∂y₁ × ∂y₁/∂w₁
+```
+
+### Layer-wise Gradients
+
+**Dense Layer Backward Pass:**
+```
+∂L/∂inputs = ∂L/∂outputs × weights^T
+∂L/∂weights = inputs^T × ∂L/∂outputs  
+∂L/∂biases = sum(∂L/∂outputs, axis=0)
+```
+
+**ReLU Activation Backward Pass:**
+```
+∂L/∂inputs = ∂L/∂outputs if inputs > 0, else 0
+```
+
+**Softmax + Cross-Entropy (Combined):**
+```
+∂L/∂inputs = (predicted_probabilities - true_labels) / batch_size
+```
+
+### Implementation
+
+```python
+from Layer.layer_dense import LayerDense
+from Activation_Functions.act_func import ActivationReLU, Activation_Softmax_Loss_CategoricalCrossentropy
+import numpy as np
+
+# Create network layers
+dense1 = LayerDense(2, 3)
+activation1 = ActivationReLU()
+dense2 = LayerDense(3, 3)
+loss_activation = Activation_Softmax_Loss_CategoricalCrossentropy()
+
+# Sample data
+X = [[1.0, 2.0], [2.0, 3.0]]  # inputs
+y = [0, 1]  # true labels
+
+# Forward pass
+dense1.forward(X)
+activation1.forward(dense1.output)
+dense2.forward(activation1.output)
+loss = loss_activation.forward(dense2.output, y)
+
+# Backward pass - compute gradients
+loss_activation.backward(loss_activation.output, y)
+dense2.backward(loss_activation.dinputs)
+activation1.backward(dense2.dinputs)
+dense1.backward(activation1.dinputs)
+
+# Access computed gradients
+print("Layer 1 weight gradients:", dense1.dweights)
+print("Layer 1 bias gradients:", dense1.dbiases)
+print("Layer 2 weight gradients:", dense2.dweights)
+print("Layer 2 bias gradients:", dense2.dbiases)
+```
+
+### Gradient Flow
+
+The backpropagation algorithm works in reverse order of the forward pass:
+
+1. **Loss Function**: Calculate gradient of loss with respect to predictions
+2. **Output Layer**: Compute gradients for final layer weights and biases
+3. **Hidden Layers**: Propagate gradients backward through each layer
+4. **Activation Functions**: Apply activation function derivatives
+5. **Input Layer**: Compute gradients for first layer parameters
+
+### Key Features
+
+- **Automatic Differentiation**: Each layer stores inputs during forward pass for gradient computation
+- **Batch Processing**: Handles multiple samples simultaneously for efficiency
+- **Memory Efficient**: Gradients computed in-place without storing full computation graph
+- **Numerical Stability**: Uses techniques like gradient clipping and careful initialization
+
+### Gradient Storage
+
+Each layer stores three types of gradients:
+- **`dweights`**: Gradients with respect to weights
+- **`dbiases`**: Gradients with respect to biases  
+- **`dinputs`**: Gradients with respect to inputs (passed to previous layer)
+
+### Training Loop Integration
+
+```python
+for epoch in range(epochs):
+    # Forward pass
+    dense1.forward(X)
+    activation1.forward(dense1.output)
+    dense2.forward(activation1.output)
+    loss = loss_activation.forward(dense2.output, y)
+    
+    # Backward pass
+    loss_activation.backward(loss_activation.output, y)
+    dense2.backward(loss_activation.dinputs)
+    activation1.backward(dense2.dinputs)
+    dense1.backward(activation1.dinputs)
+    
+    # Optimizer will use the computed gradients to update parameters
+    # optimizer.update_params(dense1)
+    # optimizer.update_params(dense2)
+```
+
+## Chapter 7: Optimizers
 
 ### Overview
 Optimizers update neural network parameters (weights and biases) based on gradients to minimize the loss function. Different optimizers use various strategies to make training more efficient and stable.
